@@ -72,6 +72,11 @@ const CalendarScreen = () => {
     setModalVisible(true);
   };
 
+  const onInvite = (item) => {
+    console.log(item, '@@@@@@@@')
+    return item
+  }
+
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => {setSelectedCategory(null); setFilteredEvents(events)}}>
@@ -82,7 +87,7 @@ const CalendarScreen = () => {
   data={filteredEvents.filter((event) =>
     selectedCategory ? event.category === selectedCategory.key : true
   )}
-  renderItem={({ item }) => <EventListItem event={item} onPress={handleEventPress} />}
+  renderItem={({ item }) => <EventListItem event={item} onPress={handleEventPress} onInvite={onInvite(item)}/>}
   keyExtractor={(item) => item.id}
 />
       <Modal

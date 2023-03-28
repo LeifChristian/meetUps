@@ -4,25 +4,26 @@ import * as Facebook from 'expo-facebook';
 import * as SMS from 'expo-sms';
 
 const InviteScreen = () => {
-    const inviteByEmail = async () => {
-        const subject = 'Check out this awesome event app!';
-        const body = 'Hey, I found this amazing event app. You should check it out! http://www.google.com';
-        const url = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    
-        if (await Linking.canOpenURL(url)) {
-          Linking.openURL(url);
-        } else {
-          alert('Unable to send email');
-        }
-      };
-
-  const inviteBySMS = async () => {
-    const { result } = await SMS.sendSMSAsync(
-      [], // Array of phone numbers to send the SMS to
-      'Check out this awesome event app! http://www.google.com' // The SMS message
-    );
-    console.log('SMS sent:', result);
+  const inviteByEmail = async (eventId, eventName) => {
+    const subject = `Check out this awesome event: ${eventName}`;
+    const body = `Hey, I found this amazing event. You should check it out! http://www.google.com?event=${eventId}`;
+    const url = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  
+    if (await Linking.canOpenURL(url)) {
+      Linking.openURL(url);
+    } else {
+      alert('Unable to send email');
+    }
   };
+  
+      const inviteBySMS = async (eventId, eventName) => {
+        const { result } = await SMS.sendSMSAsync(
+          [], // Array of phone numbers to send the SMS to
+          `Check out this awesome event: ${eventName} (ID: ${eventId}) http://www.google.com` // The SMS message
+        );
+        console.log('SMS sent:', result);
+      };
+      
 
   const inviteByFacebook = async () => {
     try {
