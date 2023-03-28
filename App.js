@@ -1,20 +1,80 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Icon from 'react-native-vector-icons/Ionicons';
+import CalendarScreen from './CalendarScreen';
+import CreateEvent from './CreateEvent';
+import InviteScreen from './InviteScreen';
+import SettingsScreen from './SettingsScreen';
+import CustomCalendar from './Calendar';
+import { View, Text, useColorScheme } from 'react-native';
 
-export default function App() {
+const Tab = createBottomTabNavigator();
+
+const App = () => {
+  const colorScheme = useColorScheme();
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+    <NavigationContainer>
+      <Tab.Navigator
+        initialRouteName="CalendarScreen"
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+            switch (route.name) {
+              case 'CalendarScreen':
+                iconName = focused ? 'search' : 'search-outline';
+                break;
+              case 'CreateEvent':
+                iconName = focused ? 'add-circle' : 'add-circle-outline';
+                break;
+              case 'Invite':
+                iconName = focused ? 'people' : 'people-outline';
+                break;
+              case 'Calendar':
+                iconName = focused ? 'calendar' : 'calendar-outline';
+                break;
+              case 'Settings':
+                iconName = focused ? 'settings' : 'settings-outline';
+                break;
+            }
+
+            return <Icon name={iconName} size={size} color={color} />;
+          },
+        })}
+        tabBarOptions={{
+          activeTintColor: 'blue',
+          inactiveTintColor: 'gray',
+        }}
+      >
+        <Tab.Screen
+          name="CalendarScreen"
+          component={CalendarScreen}
+          options={{ title: 'Explore' }}
+        />
+        <Tab.Screen
+          name="CreateEvent"
+          component={CreateEvent}
+          options={{ title: 'Create Event' }}
+        />
+        <Tab.Screen
+          name="Invite"
+          component={InviteScreen}
+          options={{ title: 'Invite' }}
+        />
+        <Tab.Screen
+          name="Calendar"
+          component={CustomCalendar}
+          options={{ title: 'Calendar' }}
+        />
+        <Tab.Screen
+          name="Settings"
+          component={SettingsScreen}
+          options={{ title: 'Settings' }}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+};
+
+export default App;
