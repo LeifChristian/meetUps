@@ -4,8 +4,8 @@ import * as Facebook from 'expo-facebook';
 import * as SMS from 'expo-sms';
 
 const InviteScreen = () => {
-  const inviteByEmail = async (eventId, eventName) => {
-    const subject = `Check out this awesome event: ${eventName}`;
+  const inviteByEmail = async (eventId=88, eventName={bob: 'dave'}) => {
+    const subject = `Check out this awesome event: ${eventName.bob}`;
     const body = `Hey, I found this amazing event. You should check it out! http://www.google.com?event=${eventId}`;
     const url = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   

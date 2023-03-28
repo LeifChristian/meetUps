@@ -37,10 +37,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 17,
-    maxWidth: 600,
+    maxWidth: 190,
     overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
   },
   buttonContainer: {
     flexDirection: 'row',
