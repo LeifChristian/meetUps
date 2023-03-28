@@ -6,7 +6,7 @@ import * as SMS from 'expo-sms';
 const InviteScreen = () => {
     const inviteByEmail = async () => {
         const subject = 'Check out this awesome event app!';
-        const body = 'Hey, I found this amazing event app. You should check it out!';
+        const body = 'Hey, I found this amazing event app. You should check it out! http://www.google.com';
         const url = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     
         if (await Linking.canOpenURL(url)) {

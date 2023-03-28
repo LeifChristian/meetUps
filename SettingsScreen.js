@@ -17,7 +17,7 @@ const SettingsScreen = () => {
 
   return (
     <ScrollView>
-      <View>
+      <View style={{maxWidth: "90%", marginLeft: '5%'}}>
         <Text style={styles.sectionTitle}>Profile Settings</Text>
         {/* Add profile settings components here */}
 
