@@ -13,37 +13,38 @@ const CalendarScreen = () => {
     { key: 'technology', label: 'Technology', color: 'blue' },
     { key: 'arts', label: 'Arts', color: 'orange' },
   ];
-  const events = [
-    {
-      date: '2023-04-10',
-      title: 'Basketball Game',
-      description: 'Come watch the New York Knicks play against the Los Angeles Lakers!',
-      location: 'Madison Square Garden',
-      category: 'sports'
-    },
-    {
-      date: '2023-04-12',
-      title: 'Jazz Night',
-      description: 'Join us for a night of live jazz music featuring local artists.',
-      location: 'The Fillmore',
-      category: 'music'
-    },
-    {
-      date: '2023-04-20',
-      title: 'Tech Conference',
-      description: 'Discover the latest advancements in technology and network with industry professionals.',
-      location: 'McCormick Place',
-      category: 'technology'
-    },
-    { date: '2023-04-15', title: 'Art Exhibit Opening', description: 'Come view our latest art exhibit featuring local artists.', location: 'New York', category: 'arts' }
+  // const events = [
+  //   {
+  //     date: '2023-04-10',
+  //     title: 'Basketball Game',
+  //     description: 'Come watch the New York Knicks play against the Los Angeles Lakers!',
+  //     location: 'Madison Square Garden',
+  //     category: 'sports'
+  //   },
+  //   {
+  //     date: '2023-04-12',
+  //     title: 'Jazz Night',
+  //     description: 'Join us for a night of live jazz music featuring local artists.',
+  //     location: 'The Fillmore',
+  //     category: 'music'
+  //   },
+  //   {
+  //     date: '2023-04-20',
+  //     title: 'Tech Conference',
+  //     description: 'Discover the latest advancements in technology and network with industry professionals.',
+  //     location: 'McCormick Place',
+  //     category: 'technology'
+  //   },
+  //   { date: '2023-04-15', title: 'Art Exhibit Opening', description: 'Come view our latest art exhibit featuring local artists.', location: 'New York', category: 'arts' }
 
-  ];
-  
-  
+  // ];
   
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isAllClicked, setIsAllClicked] = useState(true)
+  const [filteredEvents, setFilteredEvents] = useState(events);
+
 
   const handleCategorySelect = (category) => {
     console.log('Selected category:', category);
@@ -52,8 +53,18 @@ const CalendarScreen = () => {
 
   const handleSearch = (searchText) => {
     console.log('Search text:', searchText);
-    // Add logic to search for events
+    setSelectedCategory(null);
+    if (searchText.trim() === '') {
+      setFilteredEvents(events);
+    } else {
+      const filtered = events.filter((event) =>
+        event.title.toLowerCase().includes(searchText.toLowerCase()) ||
+        event.category.toLowerCase().includes(searchText.toLowerCase())
+      );
+      setFilteredEvents(filtered);
+    }
   };
+  
 
   const handleEventPress = (event) => {
     console.log('Event pressed:', event);
@@ -63,11 +74,12 @@ const CalendarScreen = () => {
 
   return (
     <View style={styles.container}>
-      <EventSearch onSearch={handleSearch} />
+      <TouchableOpacity onPress={() => {setSelectedCategory(null); setFilteredEvents(events)}}>
+      <EventSearch onSearch={handleSearch} /></TouchableOpacity>
      
      <View style={{display: 'none'}}><CustomCalendar events={events}  /></View>
       <FlatList
-  data={events.filter((event) =>
+  data={filteredEvents.filter((event) =>
     selectedCategory ? event.category === selectedCategory.key : true
   )}
   renderItem={({ item }) => <EventListItem event={item} onPress={handleEventPress} />}

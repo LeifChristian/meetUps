@@ -11,20 +11,23 @@ import {
 const EventSearch = ({ onSearch }) => {
   const [searchText, setSearchText] = useState('');
 
+
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        value={searchText}
-        onChangeText={setSearchText}
-        placeholder="Search for events"
-      />
-      <TouchableOpacity
-        style={styles.searchButton}
-        onPress={() => onSearch(searchText)}>
-        <Text style={styles.buttonText}>Search</Text>
-      </TouchableOpacity>
-    </View>
+
+  <View style={styles.container}>
+    <TextInput
+      style={styles.input}
+      value={searchText}
+      onChangeText={setSearchText}
+      placeholder="Search for events"
+    />
+    <TouchableOpacity
+      style={styles.searchButton}
+      onPress={() => onSearch(searchText)}>
+      <Text style={styles.buttonText}>Search</Text>
+    </TouchableOpacity>
+  </View>
+
   );
 };
 
@@ -38,14 +41,13 @@ const styles = StyleSheet.create({
     top: -11,
     borderColor: '#ccc',
     borderWidth: 1,
-    width: "90%",
+    width: 200,
     borderRadius: 5,
     paddingHorizontal: 10,
     paddingVertical: 5,
   },
   searchButton: {
-    width: "46%",
-   
+    margin: 'auto',
     backgroundColor: '#3a9',
     paddingHorizontal: 15,
     paddingVertical: 5,
