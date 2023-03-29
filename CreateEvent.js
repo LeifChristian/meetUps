@@ -7,16 +7,18 @@ const CreateEvent = () => {
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [location, setLocation] = useState('');
+  const [category, setCategory] = useState('');
 
   const handleSubmit = async () => {
     // Add logic to save the event, e.g., make an API call to your server
-    console.log('Event submitted:', {
-      title,
-      description,
-      date,
-      time,
-      location,
-    });
+    const newEvent = {
+      title: title,
+      description: description,
+      category: category,
+      date: date,
+      time: time,
+      location: location
+    }
 
     try {
       const response = await axios.post('http://192.168.1.16:3001/events', newEvent);
@@ -45,7 +47,7 @@ const CreateEvent = () => {
         style={styles.input}
         value={description}
         onChangeText={setDescription}
-        placeholder="Enter event description"
+        placeholder="Enter escription"
         multiline
       />
 
@@ -57,12 +59,20 @@ const CreateEvent = () => {
         placeholder="Enter event date"
       />
 
+<Text style={styles.label}>Category</Text>
+      <TextInput
+        style={styles.input}
+        value={date}
+        onChangeText={setDate}
+        placeholder="Enter category"
+      />
+
       <Text style={styles.label}>Time</Text>
       <TextInput
         style={styles.input}
         value={time}
         onChangeText={setTime}
-        placeholder="Enter event time"
+        placeholder="Enter time"
       />
 
       <Text style={styles.label}>Location</Text>
@@ -70,7 +80,7 @@ const CreateEvent = () => {
         style={styles.input}
         value={location}
         onChangeText={setLocation}
-        placeholder="Enter event location"
+        placeholder="Enter location"
       />
 
       <Button title="Create Event" onPress={handleSubmit} />
