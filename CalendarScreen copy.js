@@ -18,6 +18,11 @@ const CalendarScreen = () => {
   const [filteredEvents, setFilteredEvents] = useState([]);
 
   useEffect(() => {
+    console.log(filteredEvents, "fuck you");
+  }, [filteredEvents]);
+  
+
+  useEffect(() => {
     const config = {
       method: 'get',
       url: 'http://192.168.1.16:3001/events',
@@ -29,7 +34,9 @@ const CalendarScreen = () => {
     const fetchEvents = async () => {
       try {
         const response = await axios(config);
+        setFilteredEvents(response.data);
         setEventsFromServer(response.data);
+        console.log(filteredEvents, 'FEEEELT');
         console.log(response.data, '!!!!!!!!!!')
       } catch (error) {
         console.log(error);
@@ -42,24 +49,22 @@ const CalendarScreen = () => {
   useEffect(() => {
     if (eventFromServer) {
       if (selectedCategory === null && searchText.trim() === '') {
-        console.log(filteredEvents, '000000')
         setFilteredEvents(eventFromServer);
-        console.log(filteredEvents, '11111111')
       } else if (selectedCategory === null) {
         const filtered = eventFromServer.filter((event) =>
           event.title.toLowerCase().includes(searchText.toLowerCase()) ||
           event.category.toLowerCase().includes(searchText.toLowerCase())
         );
-        console.log(filteredEvents, '2222222')
+        console.log(filteredEvents, 'pre');
         setFilteredEvents(filtered);
-        console.log(filteredEvents, '3333333')
+        console.log(filteredEvents, 'post');
       } else {
         const filtered = eventFromServer.filter((event) =>
           event.category === selectedCategory.key &&
           (event.title.toLowerCase().includes(searchText.toLowerCase()) ||
           event.category.toLowerCase().includes(searchText.toLowerCase()))
         );
-       
+        setFilteredEvents(filtered);
       }
     }
   }, [eventFromServer, selectedCategory, searchText]); 
@@ -69,15 +74,17 @@ const CalendarScreen = () => {
     console.log('Selected category:', category.key);
     setSelectedCategory(category);
     setSearchText(category.key);
+    console.log(searchText);
     setIsAllClicked(false);
  
-    const filtered = eventFromServer.filter((event) => event.category.toLowerCase().includes(category.key.toLowerCase()))
-
-    console.log(filteredEvents, '6666666')
-    setFilteredEvents(filtered);
-    console.log(filteredEvents, '7777777')
+      const filtered = eventFromServer.filter((event) => event.category.toLowerCase().includes(category.key.toLowerCase()))
+      console.log(filtered, 'filtered events')
+      setFilteredEvents(filtered);
+      console.log(filteredEvents, 'filteredEvents96')
     
   };
+  
+  
 
 
   const handleSearch = (searchText) => {
@@ -85,20 +92,16 @@ const CalendarScreen = () => {
     setSelectedCategory(null);
     setSearchText(searchText);
     if (searchText.trim() === '') {
-      console.log(filteredEvents, '888888')
-      // setFilteredEvents(eventFromServer);
-      console.log(filteredEvents, '999999')
+      setFilteredEvents(eventFromServer);
     } else {
       const filtered = eventFromServer.filter((event) =>
         event.title.toLowerCase().includes(searchText.toLowerCase()) ||
         event.category.toLowerCase().includes(searchText.toLowerCase())
       );
-      console.log(filteredEvents, '101010101010')
       setFilteredEvents(filtered);
-      console.log(filteredEvents, '11111111111111111111')
+   
     }
   };
-  
   
 
   const handleEventPress = (event) => {
@@ -134,6 +137,13 @@ const CalendarScreen = () => {
   keyboardShouldPersistTaps="always"
   contentContainerStyle={{ flexGrow: 1 }}
   ListEmptyComponent={() => <Text>No events found</Text>}
+  onRefresh={() => {
+    const refreshed = eventFromServer.filter((event) =>
+      selectedCategory ? event.category === selectedCategory.key : true
+    );
+    setFilteredEvents(refreshed);
+  }}
+  refreshing={false}
 />
       <Modal
         animationType="slide"

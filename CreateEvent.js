@@ -8,7 +8,7 @@ const CreateEvent = () => {
   const [time, setTime] = useState('');
   const [location, setLocation] = useState('');
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // Add logic to save the event, e.g., make an API call to your server
     console.log('Event submitted:', {
       title,
@@ -17,7 +17,18 @@ const CreateEvent = () => {
       time,
       location,
     });
+
+    try {
+      const response = await axios.post('http://192.168.1.16:3001/events', newEvent);
+      console.log(response.data); // logs the newly created event object
+      if(response.data){ alert(response.data); console.log('success') }
+      // clear form or navigate to event list screen
+    } catch (err) {
+      console.error(err);
+    }
   };
+
+ 
 
   return (
     <View style={styles.container}>
