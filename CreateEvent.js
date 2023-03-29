@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import axios from 'axios'
 
 const CreateEvent = () => {
   const [title, setTitle] = useState('');
@@ -19,18 +20,24 @@ const CreateEvent = () => {
       time: time,
       location: location
     }
+    
+    console.log(newEvent, 'new');
 
-    try {
-      const response = await axios.post('http://192.168.1.16:3001/events', newEvent);
-      console.log(response.data); // logs the newly created event object
-      if(response.data){ alert(response.data); console.log('success') }
-      // clear form or navigate to event list screen
-    } catch (err) {
-      console.error(err);
-    }
+    var config = {
+      method: 'post',
+      url: 'http://192.168.1.16:3001/events',
+      headers: { 
+        'Content-Type': 'application/json'
+      },
+      data : newEvent
+    };
+
+    axios(config)
+    .then(function (response) {
+    console.log(JSON.stringify(response.data));}).catch(function (error) {console.log(error);});
+
   };
 
- 
 
   return (
     <View style={styles.container}>
@@ -62,8 +69,8 @@ const CreateEvent = () => {
 <Text style={styles.label}>Category</Text>
       <TextInput
         style={styles.input}
-        value={date}
-        onChangeText={setDate}
+        value={category}
+        onChangeText={setCategory}
         placeholder="Enter category"
       />
 
