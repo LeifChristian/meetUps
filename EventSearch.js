@@ -11,29 +11,32 @@ import {
 const EventSearch = ({ onSearch }) => {
   const [searchText, setSearchText] = useState('');
 
+  const handleSearchTextChange = (text) => {
+    setSearchText(text);
+    onSearch(text);
+  };
 
   return (
-
-  <View style={styles.container}>
-    <TextInput
-      style={styles.input}
-      value={searchText}
-      onChangeText={setSearchText}
-      placeholder="Search for events"
-    />
-    <TouchableOpacity
-      style={styles.searchButton}
-      onPress={() => onSearch(searchText)}>
-      <Text style={styles.buttonText}>Search</Text>
-    </TouchableOpacity>
-  </View>
-
+    <View style={styles.container}>
+      <TextInput
+        style={styles.input}
+        value={searchText}
+        onChangeText={handleSearchTextChange}
+        placeholder="Search for events"
+      />
+      <TouchableOpacity
+        style={styles.searchButton}
+        onPress={() => onSearch(searchText)}
+      >
+        <Text style={styles.buttonText}>Search</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    display: "flex",
+    display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
   },
