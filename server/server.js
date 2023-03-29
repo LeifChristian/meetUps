@@ -87,14 +87,21 @@ router.patch('/:id', getEvent, async (req, res) => {
 });
 
 // DELETE an event
-router.delete('/:id', getEvent, async (req, res) => {
+// DELETE an event
+router.delete('/:id', async (req, res) => {
   try {
-    await res.event.remove();
+    const event = await Event.findByIdAndRemove(req.params.id);
+
+    if (!event) {
+      return res.status(404).json({ message: 'Cannot find event' });
+    }
+
     res.json({ message: 'Deleted event' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
+
 
 async function getEvent(req, res, next) {
   let event;

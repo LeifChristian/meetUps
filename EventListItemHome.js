@@ -5,24 +5,25 @@ import { MaterialIcons } from '@expo/vector-icons';
 const invite = (thing)=>{console.log('invite!',thing)}
 
 const EventListItem = ({ event, onPress, onInvite }) => (
-
-  <TouchableOpacity style={styles.container} onPress={() => onPress(event)}>
-    <Text style={styles.title}>
-      <Text style={{ fontWeight: 'bold' }}>{event.title}</Text> -{' '}
-      <Text
-        style={{ textDecorationLine: 'none', color: 'grey' }}
-        onPress={() => console.log(event.location)}
-      >
-        {event.location}
-      </Text>
+<TouchableOpacity style={styles.container} onPress={() => onPress(event)}>
+  <Text style={styles.title}>
+    <Text style={{ fontWeight: 'bold' }}>{event.title}</Text>
+    <Text style={{ fontStyle: 'italic', fontSize: 12 }}> - {event.category}</Text>
+    {"\n"}
+    <Text style={{ textDecorationLine: 'none', color: 'grey', fontSize: 14 }}>
+      {event.location}
     </Text>
-    <View style={styles.buttonContainer}>
-      <TouchableOpacity onPress={() => invite(event)} style={styles.button}>
-        <MaterialIcons name="person-add" size={14} color="white" />
-        <Text style={styles.buttonText}>Invite</Text>
-      </TouchableOpacity>
-    </View>
-  </TouchableOpacity>
+  </Text>
+  <View style={styles.buttonContainer}>
+    <TouchableOpacity onPress={() => invite(event)} style={styles.button}>
+      <MaterialIcons name="person-add" size={14} color="white" />
+      <Text style={styles.buttonText}>Invite</Text>
+    </TouchableOpacity>
+  </View>
+</TouchableOpacity>
+
+
+
 );
 
 const styles = StyleSheet.create({
@@ -37,7 +38,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 17,
-    maxWidth: 190,
+    maxWidth: 280,
     overflow: 'hidden',
   },
   buttonContainer: {

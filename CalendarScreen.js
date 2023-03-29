@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, Modal, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, FlatList, Modal, TouchableOpacity, Text, Alert } from 'react-native';
 import CategoryList from './CategoryList';
 import EventSearch from './EventSearch';
 import CustomCalendar from './Calendar';
 import EventListItem from './EventListItemHome';
+import { useFocusEffect } from '@react-navigation/native';
 import axios from 'axios';
 
 const CalendarScreen = () => {
@@ -17,25 +18,25 @@ const CalendarScreen = () => {
   const [eventFromServer, setEventsFromServer] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
 
+  const config = {
+    method: 'get',
+    url: 'http://192.168.1.16:3001/events',
+    headers: { 
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const fetchEvents = async () => {
+    try {
+      const response = await axios(config);
+      setEventsFromServer(response.data);
+      console.log(response.data, '!!!!!!!!!!')
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    const config = {
-      method: 'get',
-      url: 'http://192.168.1.16:3001/events',
-      headers: { 
-        'Content-Type': 'application/json'
-      }
-    };
-  
-    const fetchEvents = async () => {
-      try {
-        const response = await axios(config);
-        setEventsFromServer(response.data);
-        console.log(response.data, '!!!!!!!!!!')
-      } catch (error) {
-        console.log(error);
-      }
-    };
-  
     fetchEvents();
   }, []);
   
@@ -63,6 +64,15 @@ const CalendarScreen = () => {
       }
     }
   }, [eventFromServer, selectedCategory, searchText]); 
+
+  
+  useFocusEffect(
+    React.useCallback(() => {
+    
+   
+      fetchEvents(); // Call the function to refresh the events list when the screen comes back into focus
+    }, [])
+  );
 
 
   const handleCategorySelect = (category) => {
@@ -99,6 +109,50 @@ const CalendarScreen = () => {
     }
   };
   
+
+  const handleEditEvent = async (event) => {
+    const updatedEvent = { ...event }; // make a copy of the event object to avoid modifying the original object
+  
+    // make the patch request to update the event
+    try {
+      const response = await axios.patch(`http://192.168.1.16:3001/events/${event.id}`, updatedEvent);
+      console.log(response.data); // log the updated event
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
+  const handleDeleteEvent = async (theEvent) => {
+
+    console.log(theEvent, 'BILL!!!!!');
+
+    // show a confirmation prompt before deleting the event
+    Alert.alert(
+      `Delete Event`,
+      `Are you sure you want to delete ${theEvent.title}?`,
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel'
+        },
+        {
+          text: 'Delete',
+          onPress: async () => {
+            // make the delete request to delete the event
+            try {
+              const response = await axios.delete(`http://192.168.1.16:3001/events/${theEvent._id}`);
+              console.log(response.data); // log the message
+            } catch (error) {
+              console.log(error);
+            }
+          },
+          style: 'destructive'
+        }
+      ]
+    );
+    fetchEvents();
+  };
   
 
   const handleEventPress = (event) => {
@@ -135,7 +189,7 @@ const CalendarScreen = () => {
   contentContainerStyle={{ flexGrow: 1 }}
   ListEmptyComponent={() => <Text>No events found</Text>}
 />
-      <Modal
+      {/* <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
@@ -157,7 +211,56 @@ const CalendarScreen = () => {
             <Text style={styles.modalCloseButtonText}>Close</Text>
           </TouchableOpacity>
         </View>
-      </Modal>
+      </Modal> */}
+
+<Modal
+  animationType="slide"
+  transparent={true}
+  visible={modalVisible}
+  onRequestClose={() => {
+    setModalVisible(false);
+    setSelectedEvent(null);
+  }}
+>
+  <View style={styles.modal}>
+    <Text style={styles.modalTitle}>{selectedEvent?.title}</Text>
+    <Text style={styles.modalDescription}>{selectedEvent?.description}</Text>
+    <Text style={styles.modalDescription}>{selectedEvent?.location}</Text>
+    <View style={styles.modalButtonContainer}>
+      <TouchableOpacity
+        style={[styles.modalButton, styles.closeButton]}
+        onPress={() => {
+          setModalVisible(false);
+          setSelectedEvent(null);
+        }}
+      >
+        <Text style={styles.modalButtonText}>Close</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.modalButton, styles.editButton]}
+        onPress={() => {
+          handleEditEvent(selectedEvent); // call handleEditEvent with the selected event object
+          setModalVisible(false);
+          setSelectedEvent(null);
+          fetchEvents();
+        }}
+      >
+        <Text style={styles.modalButtonText}>Edit</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.modalButton, styles.deleteButton]}
+        onPress={() => {
+          handleDeleteEvent(selectedEvent); // call handleDeleteEvent with the selected event ID
+          setModalVisible(false);
+          setSelectedEvent(null);
+        }}
+      >
+        <Text style={styles.modalButtonText}>Delete</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+</Modal>
+
   
       <CategoryList categories={categories} onCategorySelect={handleCategorySelect} />
     </View>
@@ -166,6 +269,33 @@ const CalendarScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  modalButton: {
+    backgroundColor: '#2196F3',
+    padding: 10,
+    borderRadius: 5,
+    marginRight: 10,
+  },
+  modalCloseButton: {
+    backgroundColor: '#bbb',
+    padding: 10,
+    borderRadius: 5,
+    marginLeft: 10,
+  },
+  modalButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalCloseButtonText: {
+    color: '#000',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
   container: {
     flex: 1,
     padding: 20,
