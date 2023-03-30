@@ -36,8 +36,8 @@ const CreateEvent = () => {
   };
 
   const handleDatePicked = (selectedDate) => {
-    setDate(moment(selectedDate).format('YYYY-MM-DD'));
-    setTime(moment(selectedDate).format('hh:mm A'));
+    const formattedDate = moment(selectedDate).format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ [(Coordinated Universal Time)]');
+    setDate(formattedDate);
     hideDateTimePicker();
   };
 
@@ -93,7 +93,7 @@ const CreateEvent = () => {
       <Text style={styles.label}>Date and Time</Text>
       <TouchableOpacity style={styles.input} onPress={showDateTimePicker}>
         <Text style={{ color: 'gray' }}>
-          {date && time ? moment(date + ' ' + time, 'YYYY-MM-DD hh:mm A').format('MMM DD, YYYY - hh:mm A') : 'Select Date and Time'}
+        {date}
         </Text>
       </TouchableOpacity>
       <DateTimePickerModal
@@ -146,8 +146,8 @@ const CreateEvent = () => {
       borderWidth: 1,
       borderColor: '#ccc',
       borderRadius: 4,
-      padding: 4,
-      marginTop: 3,
+      padding: 8,
+      marginTop: 8,
     },
     dateTimePicker: {
       flex: 1,

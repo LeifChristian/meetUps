@@ -57,11 +57,12 @@ useFocusEffect(
   }, {});
 
   const handleDayPress = (day) => {
-  
-    const eventsForSelectedDay = events.filter((event) => event.date === day.dateString);
+    const selectedDate = moment(day.dateString).format('YYYY-MM-DD');
+    const eventsForSelectedDay = events.filter((event) => moment(event.date).format('YYYY-MM-DD') === selectedDate);
     setSelectedEvents(eventsForSelectedDay);
     setModalVisible(true);
   };
+  
 
   return (
     <View>
@@ -85,6 +86,7 @@ useFocusEffect(
                 <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{event.title}</Text>
                 <Text>{event.description}</Text>
                 <Text>Location: {event.location}</Text>
+                <Text>{moment(event.date)?.format('MMMM DD, YYYY - hh:mm A')? moment(event.date)?.format('MMMM DD, YYYY - hh:mm A'): ''}</Text>       
               </View>
             ))}
             <TouchableOpacity
