@@ -306,11 +306,11 @@ const [isDateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
       value={editedEvent?.title}
       onChangeText={(text) => setEditedEvent({...editedEvent, title: text})}
     />
-   <TouchableOpacity style={styles.input} onPress={()=>{setDateTimePickerVisibility(true)}}>
-   <Text style={{ color: 'gray' }}>
-          {moment(date)?.format('MMMM DD, YYYY - hh:mm A')? moment(date)?.format('MMMM DD, YYYY - hh:mm A'): ''}
-        </Text>
 
+   <TouchableOpacity style={styles.input} onPress={()=>{setDateTimePickerVisibility(true)}}>
+    <Text style={{ color: 'gray' }}>
+    {editedEvent?.date ? moment(editedEvent.date).format('MMMM DD, YYYY - hh:mm A') : ''}
+  </Text>
 </TouchableOpacity>
 <DateTimePickerModal
   isVisible={isDateTimePickerVisible}
@@ -342,7 +342,6 @@ const [isDateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
       <TouchableOpacity
         style={styles.modalButton}
         onPress={() => {
-          handleUpdateEvent(editedEvent);
           setEditedEvent(null);
           setEditModalVisible(false);
         }}
