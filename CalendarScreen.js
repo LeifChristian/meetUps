@@ -1,22 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, Modal, TouchableOpacity, Text, Alert } from 'react-native';
+import { View, StyleSheet, FlatList, Modal, TouchableOpacity, Text, Alert, TextInput } from 'react-native';
 import CategoryList from './CategoryList';
 import EventSearch from './EventSearch';
 import CustomCalendar from './Calendar';
 import EventListItem from './EventListItemHome';
 import { useFocusEffect } from '@react-navigation/native';
 import axios from 'axios';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import moment from 'moment';
+
 
 const CalendarScreen = () => {
   const categories = [    { key: 'sports', label: 'Sports', color: 'red' },    { key: 'music', label: 'Music', color: 'green' },    { key: 'technology', label: 'Technology', color: 'blue' },    { key: 'arts', label: 'Arts', color: 'orange' },  ];
-  
   const [modalVisible, setModalVisible] = useState(false);
+  const [editModalVisible, setEditModalVisible] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isAllClicked, setIsAllClicked] = useState(true);
   const [searchText, setSearchText] = useState('');
   const [eventFromServer, setEventsFromServer] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
+  const [editedEvent, setEditedEvent] = useState(null);
+  const [title, setTitle] = useState('');
+const [description, setDescription] = useState('');
+const [date, setDate] = useState('');
+const [time, setTime] = useState('');
+const [location, setLocation] = useState('');
+const [category, setCategory] = useState('');
+const [isDateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
+
 
   const config = {
     method: 'get',
@@ -43,17 +55,14 @@ const CalendarScreen = () => {
   useEffect(() => {
     if (eventFromServer) {
       if (selectedCategory === null && searchText.trim() === '') {
-        console.log(filteredEvents, '000000')
         setFilteredEvents(eventFromServer);
-        console.log(filteredEvents, '11111111')
       } else if (selectedCategory === null) {
         const filtered = eventFromServer.filter((event) =>
           event.title.toLowerCase().includes(searchText.toLowerCase()) ||
           event.category.toLowerCase().includes(searchText.toLowerCase())
         );
-        console.log(filteredEvents, '2222222')
+        
         setFilteredEvents(filtered);
-        console.log(filteredEvents, '3333333')
       } else {
         const filtered = eventFromServer.filter((event) =>
           event.category === selectedCategory.key &&
@@ -68,8 +77,6 @@ const CalendarScreen = () => {
   
   useFocusEffect(
     React.useCallback(() => {
-    
-   
       fetchEvents(); // Call the function to refresh the events list when the screen comes back into focus
     }, [])
   );
@@ -108,23 +115,57 @@ const CalendarScreen = () => {
       console.log(filteredEvents, '11111111111111111111')
     }
   };
+
+  const showDateTimePicker = () => {
+    setDateTimePickerVisibility(true);
+  };
+
+  const hideDateTimePicker = () => {
+    setDateTimePickerVisibility(false);
+  };
+
+  const handleDatePicked = (selectedDate) => {
+    setDate(selectedDate)
+    setEditedEvent({...editedEvent, date: selectedDate})
+    hideDateTimePicker();
+  };
   
 
   const handleEditEvent = async (event) => {
-    const updatedEvent = { ...event }; // make a copy of the event object to avoid modifying the original object
+    setEditedEvent(event); // set the event being edited in state
+    setModalVisible(false); // hide the event details modal
+    setEditModalVisible(true); // show the edit event modal
+  };
+
+  const handleUpdateEvent = async () => {
+    const updatedEvent = { ...editedEvent }; // make a copy of the edited event object to avoid modifying the original object
   
     // make the patch request to update the event
     try {
-      const response = await axios.patch(`http://54.219.200.236:3002/events/${event.id}`, updatedEvent);
-      console.log(response.data); // log the updated event
+      const response = await axios.patch(`http://54.219.200.236:3002/events/${updatedEvent._id}`, updatedEvent);
+      console.log(response.data);
+      
+      setEventsFromServer(prevEvents => {
+        // map over the previous events array and replace the edited event with the updated event
+        return prevEvents.map(event => {
+          if (event._id === editedEvent._id) {
+            return response.data;
+          } else {
+            return event;
+          }
+        });
+      });
     } catch (error) {
       console.log(error);
     }
+    
+    setEditedEvent(null); // clear the edited event from state
+    setEditModalVisible(false); // hide the edit event modal
   };
   
   const handleDeleteEvent = async (theEvent) => {
 
-    console.log(theEvent, 'BILL!!!!!');
+    // console.log(theEvent, 'BILL!!!!!');
 
     // show a confirmation prompt before deleting the event
     Alert.alert(
@@ -166,6 +207,15 @@ const CalendarScreen = () => {
     return item
   }
 
+  const isDateValid = (dateString) => {
+    try {
+      const date = new Date(dateString);
+      return !isNaN(date);
+    } catch (error) {
+      return false;
+    }
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => {setSelectedCategory(null); setSearchText('')}}>
@@ -189,30 +239,7 @@ const CalendarScreen = () => {
   contentContainerStyle={{ flexGrow: 1 }}
   ListEmptyComponent={() => <Text>No events found</Text>}
 />
-      {/* <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(false);
-        }}
-      >
-        <View style={styles.modal}>
-          <Text style={styles.modalTitle}>{selectedEvent?.title}</Text>
-          <Text style={styles.modalDescription}>{selectedEvent?.description}</Text>
-          <Text style={styles.modalDescription}>{selectedEvent?.location}</Text>
-          <TouchableOpacity
-            onPress={() => {
-              setModalVisible(false);
-              setSelectedEvent(null);
-            }}
-            style={styles.modalCloseButton}
-          >
-            <Text style={styles.modalCloseButtonText}>Close</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal> */}
-
+     
 <Modal
   animationType="slide"
   transparent={true}
@@ -226,6 +253,7 @@ const CalendarScreen = () => {
     <Text style={styles.modalTitle}>{selectedEvent?.title}</Text>
     <Text style={styles.modalDescription}>{selectedEvent?.description}</Text>
     <Text style={styles.modalDescription}>{selectedEvent?.location}</Text>
+  <Text style={styles.modalDescription}>{selectedEvent ? new Date(selectedEvent.date).toLocaleString(): ''}</Text>
     <View style={styles.modalButtonContainer}>
       <TouchableOpacity
         style={[styles.modalButton, styles.closeButton]}
@@ -261,7 +289,80 @@ const CalendarScreen = () => {
   </View>
 </Modal>
 
-  
+<Modal
+  animationType="slide"
+  transparent={true}
+  visible={editModalVisible}
+  onRequestClose={() => {
+    setEditedEvent(null);
+    setEditModalVisible(false);
+  }}
+>
+  <View style={styles.modal}>
+    <Text style={styles.modalTitle}>Edit Event</Text>
+    <TextInput
+      style={styles.modalInput}
+      placeholder="Title"
+      value={editedEvent?.title}
+      onChangeText={(text) => setEditedEvent({...editedEvent, title: text})}
+    />
+   <TouchableOpacity style={styles.input} onPress={()=>{setDateTimePickerVisibility(true)}}>
+   <Text style={{ color: 'gray' }}>
+          {moment(date)?.format('MMMM DD, YYYY - hh:mm A')? moment(date)?.format('MMMM DD, YYYY - hh:mm A'): ''}
+        </Text>
+
+</TouchableOpacity>
+<DateTimePickerModal
+  isVisible={isDateTimePickerVisible}
+  mode="datetime"
+   onConfirm={(date) => handleDatePicked(date)}
+  // onCancel={setDateTimePickerVisibility(false)}
+  onCancel={()=>{console.log(null); setDateTimePickerVisibility(false)}}
+/>
+
+    <TextInput
+      style={styles.modalInput}
+      placeholder="Description"
+      value={editedEvent?.description}
+      onChangeText={(text) => setEditedEvent({...editedEvent, description: text})}
+    />
+    <TextInput
+      style={styles.modalInput}
+      placeholder="Location"
+      value={editedEvent?.location}
+      onChangeText={(text) => setEditedEvent({...editedEvent, location: text})}
+    />
+    <TextInput
+      style={styles.modalInput}
+      placeholder="Category"
+      value={editedEvent?.category}
+      onChangeText={(text) => setEditedEvent({...editedEvent, category: text})}
+    />
+    <View style={styles.modalButtonContainer}>
+      <TouchableOpacity
+        style={styles.modalButton}
+        onPress={() => {
+          handleUpdateEvent(editedEvent);
+          setEditedEvent(null);
+          setEditModalVisible(false);
+        }}
+      >
+        <Text style={styles.modalButtonText}>Cancel</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.modalButton}
+        onPress={() => {
+          handleUpdateEvent(editedEvent);
+          setEditedEvent(null);
+          setEditModalVisible(false);
+        }}
+      >
+        <Text style={styles.modalButtonText}>Save</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+</Modal>
+
       <CategoryList categories={categories} onCategorySelect={handleCategorySelect} />
     </View>
   );

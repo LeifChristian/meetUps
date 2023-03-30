@@ -3,6 +3,8 @@ import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'rea
 import axios from 'axios';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
+import { useNavigation } from '@react-navigation/native';
+
 
 const CreateEvent = () => {
   const [title, setTitle] = useState('');
@@ -13,8 +15,20 @@ const CreateEvent = () => {
   const [category, setCategory] = useState('');
   const [isDateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
 
+
+  const navigation = useNavigation();
+
   const showDateTimePicker = () => {
     setDateTimePickerVisibility(true);
+  };
+
+  const handleCancel = () => {
+    setTitle('');
+    setDescription('');
+    setDate('');
+    setTime('');
+    setLocation('');
+    setCategory('');
   };
 
   const hideDateTimePicker = () => {
@@ -105,7 +119,14 @@ const CreateEvent = () => {
         placeholder="Enter location"
       />
 
-      <Button title="Create Event" onPress={handleSubmit} />
+      <Button title="Create Event" onPress={()=>{handleSubmit(); navigation.navigate('CalendarScreen');
+}} />
+
+
+<View><Text>{"\n"}</Text></View>
+
+<Button title="Cancel" onPress={()=>{onPress={handleCancel}; navigation.navigate('CalendarScreen');
+}} />
     </View>
   );
 };
@@ -125,8 +146,8 @@ const CreateEvent = () => {
       borderWidth: 1,
       borderColor: '#ccc',
       borderRadius: 4,
-      padding: 8,
-      marginTop: 8,
+      padding: 4,
+      marginTop: 3,
     },
     dateTimePicker: {
       flex: 1,

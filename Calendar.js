@@ -3,8 +3,8 @@ import { View, Text, Modal, TouchableOpacity } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 // import events from "./events"
 import axios from 'axios'
-
-
+import moment from 'moment';
+import { useFocusEffect } from '@react-navigation/native';
 
 const CustomCalendar = () => {
 
@@ -34,15 +34,30 @@ useEffect(() => {
 }, []);
 
 
+
+useFocusEffect(
+  React.useCallback(() => {
+    fetchEvents(); // Call the function to refresh the events list when the screen comes back into focus
+  }, [])
+);
+
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedEvents, setSelectedEvents] = useState([]);
 
+  // const markedDates = events.reduce((acc, event) => {
+  //   acc[event.date] = { marked: true, dotColor: 'blue' };
+  //   return acc;
+  // }, {});
+
+  
   const markedDates = events.reduce((acc, event) => {
-    acc[event.date] = { marked: true, dotColor: 'blue' };
+    const date = moment(event.date).format('YYYY-MM-DD');
+    acc[date] = { marked: true, dotColor: 'blue' };
     return acc;
   }, {});
 
   const handleDayPress = (day) => {
+  
     const eventsForSelectedDay = events.filter((event) => event.date === day.dateString);
     setSelectedEvents(eventsForSelectedDay);
     setModalVisible(true);
