@@ -1,9 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Modal, TouchableOpacity } from 'react-native';
 import { Calendar } from 'react-native-calendars';
-import events from "./events"
+// import events from "./events"
+import axios from 'axios'
+
+
 
 const CustomCalendar = () => {
+
+
+  const [events, setEvents] = useState([])
+
+const config = {
+  method: 'get',
+  url: 'http://54.219.200.236:3002/events',
+  headers: { 
+    'Content-Type': 'application/json'
+  }
+};
+
+const fetchEvents = async () => {
+  try {
+    const response = await axios(config);
+    setEvents(response.data);
+    console.log(response.data, '!!!!!!!!!!')
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+useEffect(() => {
+  fetchEvents();
+}, []);
+
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedEvents, setSelectedEvents] = useState([]);

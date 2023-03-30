@@ -20,7 +20,7 @@ const CalendarScreen = () => {
 
   const config = {
     method: 'get',
-    url: 'http://192.168.1.16:3001/events',
+    url: 'http://54.219.200.236:3002/events',
     headers: { 
       'Content-Type': 'application/json'
     }
@@ -115,7 +115,7 @@ const CalendarScreen = () => {
   
     // make the patch request to update the event
     try {
-      const response = await axios.patch(`http://192.168.1.16:3001/events/${event.id}`, updatedEvent);
+      const response = await axios.patch(`http://54.219.200.236:3002/events/${event.id}`, updatedEvent);
       console.log(response.data); // log the updated event
     } catch (error) {
       console.log(error);
@@ -141,7 +141,7 @@ const CalendarScreen = () => {
           onPress: async () => {
             // make the delete request to delete the event
             try {
-              const response = await axios.delete(`http://192.168.1.16:3001/events/${theEvent._id}`);
+              const response = await axios.delete(`http://54.219.200.236:3002/events/${theEvent._id}`);
               console.log(response.data); // log the message
             } catch (error) {
               console.log(error);

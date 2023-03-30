@@ -41,7 +41,7 @@ const CreateEvent = () => {
 
     var config = {
       method: 'post',
-      url: 'http://192.168.1.16:3001/events',
+      url: 'http://54.219.200.236:3002/events',
       headers: {
         'Content-Type': 'application/json'
       },
