@@ -1,44 +1,23 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import axios from 'axios';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import DateTime from 'react-datetime';
 import moment from 'moment';
-import { useNavigation } from '@react-navigation/native';
 
 
 const CreateEvent = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
   const [location, setLocation] = useState('');
   const [category, setCategory] = useState('');
-  const [isDateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
-
-
-  const navigation = useNavigation();
-
-  const showDateTimePicker = () => {
-    setDateTimePickerVisibility(true);
-  };
 
   const handleCancel = () => {
     setTitle('');
     setDescription('');
     setDate('');
-    setTime('');
     setLocation('');
     setCategory('');
-  };
-
-  const hideDateTimePicker = () => {
-    setDateTimePickerVisibility(false);
-  };
-
-  const handleDatePicked = (selectedDate) => {
-    const formattedDate = moment(selectedDate).format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ [(Coordinated Universal Time)]');
-    setDate(formattedDate);
-    hideDateTimePicker();
   };
 
   const handleSubmit = async () => {
@@ -46,8 +25,7 @@ const CreateEvent = () => {
       title: title,
       description: description,
       category: category,
-      date: date,
-      time: time,
+      date: date.format(),
       location: location
     };
 
@@ -83,24 +61,26 @@ const CreateEvent = () => {
 
       <Text style={styles.label}>Description</Text>
       <TextInput
-        style={styles.input}
+        style={[{borderColor: 'red', fontSize: 16,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 4,
+        color: '#333', 
+        fontSize: 16,minHeight: 30}]}
         value={description}
         onChangeText={setDescription}
         placeholder="Enter description"
         multiline
+        numberOfLines={4}
       />
 
       <Text style={styles.label}>Date and Time</Text>
-      <TouchableOpacity style={styles.input} onPress={showDateTimePicker}>
-        <Text style={{ color: 'gray' }}>
-        {date}
-        </Text>
-      </TouchableOpacity>
-      <DateTimePickerModal
-        isVisible={isDateTimePickerVisible}
-        mode="datetime"
-        onConfirm={handleDatePicked}
-        onCancel={hideDateTimePicker}
+      <DateTime
+        onChange={(momentObj) => setDate(momentObj)}
+        inputProps={{
+          style: styles.inputDate,
+          placeholder: 'Select date and time'
+        }}
       />
 
       <Text style={styles.label}>Category</Text>
@@ -119,49 +99,46 @@ const CreateEvent = () => {
         placeholder="Enter location"
       />
 
-      <Button title="Create Event" onPress={()=>{handleSubmit(); navigation.navigate('HomeScreen');
-}} />
+      <Button title="Create Event" onPress={handleSubmit} />
 
-
-<View><Text>{"\n"}</Text></View>
-
-<Button title="Cancel" onPress={()=>{onPress={handleCancel}; navigation.navigate('HomeScreen');
-}} />
+      <Button title="Cancel" onPress={handleCancel} />
     </View>
   );
 };
 
-  const styles = StyleSheet.create({
-    container: {
-      backgroundColor: 'black',
-      color: 'white',
-      flex: 1,
-      padding: 16,
-    },
-    label: {
-      fontSize: 16,
-      color: 'white',
-      fontWeight: 'bold',
-      marginTop: 16,
-    },
-    input: {
-      fontSize: 16,
-      borderWidth: 1,
-      borderColor: '#ccc',
-      color: 'white',
-      borderRadius: 4,
-      padding: 8,
-      marginTop: 8,
-    },
-    dateTimePicker: {
-      flex: 1,
-      flexDirection: 'column',
-      color: 'white',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    dateTimePickerButton: {
-      marginTop: 16,
-    },
-  });
-  export default CreateEvent
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#fff',
+    flex: 1,
+    padding: 16,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginTop: 16,
+  },
+  input: {
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 4,
+    padding: 8,
+    marginTop: 8,
+    color: '#333',
+  },
+  inputDate: {
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 4,
+    padding: 8,
+    marginTop: 8,
+    color: '#333',
+  },
+  multilineInput: {
+    height: 700,
+ 
+  },
+});
+
+export default CreateEvent;

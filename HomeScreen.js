@@ -16,6 +16,7 @@ const HomeScreen = () => {
     { key: 'tech', label: 'Tech', color: '#8B008B' },
     { key: 'music', label: 'Music', color: '#0074D9' },
     { key: 'arts', label: 'Arts', color: 'teal' },
+    { key: 'sauce', label: 'Sauce', color: 'grey' },
   ];
   
   const categories = categoriesPresort.sort((a, b) => {
