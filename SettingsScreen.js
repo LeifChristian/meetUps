@@ -16,28 +16,28 @@ const SettingsScreen = () => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView style={{backgroundColor: 'black', color: 'white'}}>
       <View style={{maxWidth: "90%", marginLeft: '5%'}}>
         <Text style={styles.sectionTitle}>Profile Settings</Text>
         {/* Add profile settings components here */}
 
         <Text style={styles.sectionTitle}>Notification Settings</Text>
         <View style={styles.settingRow}>
-          <Text>Push Notifications</Text>
+          <Text  style={{color: 'white'}}>Push Notifications</Text>
           <Switch
             value={notificationSettings.push}
             onValueChange={() => toggleSetting('push')}
           />
         </View>
         <View style={styles.settingRow}>
-          <Text>Email Notifications</Text>
+          <Text  style={{color: 'white'}}>Email Notifications</Text>
           <Switch
             value={notificationSettings.email}
             onValueChange={() => toggleSetting('email')}
           />
         </View>
         <View style={styles.settingRow}>
-          <Text>SMS Alerts</Text>
+          <Text  style={{color: 'white'}}>SMS Alerts</Text>
           <Switch
             value={notificationSettings.sms}
             onValueChange={() => toggleSetting('sms')}
@@ -47,21 +47,21 @@ const SettingsScreen = () => {
         <Text style={styles.sectionTitle}>Privacy Settings</Text>
         {/* Add privacy settings components here */}
         <View style={styles.settingRow}>
-          <Text>Profile Visibility</Text>
+          <Text  style={{color: 'white'}}>Profile Visibility</Text>
           <Switch
             value={privacySettings.profile}
             onValueChange={() => togglePrivacySetting('profile')}
           />
         </View>
         <View style={styles.settingRow}>
-          <Text>Message Privacy</Text>
+          <Text  style={{color: 'white'}}>Message Privacy</Text>
           <Switch
             value={privacySettings.messages}
             onValueChange={() => togglePrivacySetting('messages')}
           />
         </View>
         <View style={styles.settingRow}>
-          <Text>Activity Visibility</Text>
+          <Text style={{color: 'white'}}>Activity Visibility</Text>
           <Switch
             value={privacySettings.activity}
             onValueChange={() => togglePrivacySetting('activity')}
@@ -83,12 +83,14 @@ const SettingsScreen = () => {
 
 const styles = {
   sectionTitle: {
+    color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
     marginTop: 20,
     marginBottom: 10,
   },
   settingRow: {
+    color: 'white',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

@@ -26,6 +26,7 @@ const EventListItem = ({ event, onPress }) => {
 const styles = StyleSheet.create({
   card: {
     marginBottom: 10,
+    
   },
   title: {
     fontSize: 18,
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
   },
   location: {
     fontSize: 14,
-    color: 'gray',
+    color: 'green',
   },
   date: {
     fontSize: 14,

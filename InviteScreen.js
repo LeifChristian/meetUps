@@ -44,8 +44,8 @@ const InviteScreen = () => {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{ fontSize: 24, marginBottom: 20 }}>Invite friends</Text>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'black'}}>
+      <Text style={{ fontSize: 24, marginBottom: 20, color: 'white' }}>Invite friends</Text>
       <TouchableOpacity onPress={inviteByEmail} style={styles.button}>
         <Text style={styles.buttonText}>Invite by Email</Text>
       </TouchableOpacity>

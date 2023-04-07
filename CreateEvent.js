@@ -133,11 +133,14 @@ const CreateEvent = () => {
 
   const styles = StyleSheet.create({
     container: {
+      backgroundColor: 'black',
+      color: 'white',
       flex: 1,
       padding: 16,
     },
     label: {
       fontSize: 16,
+      color: 'white',
       fontWeight: 'bold',
       marginTop: 16,
     },
@@ -145,6 +148,7 @@ const CreateEvent = () => {
       fontSize: 16,
       borderWidth: 1,
       borderColor: '#ccc',
+      color: 'white',
       borderRadius: 4,
       padding: 8,
       marginTop: 8,
@@ -152,6 +156,7 @@ const CreateEvent = () => {
     dateTimePicker: {
       flex: 1,
       flexDirection: 'column',
+      color: 'white',
       justifyContent: 'center',
       alignItems: 'center',
     },

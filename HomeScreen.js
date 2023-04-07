@@ -254,7 +254,7 @@ const [isDateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
         <CustomCalendar events={filteredEvents} />
       </View>
 
-      <Text>{filteredEvents.length}</Text>
+      <Text style={{color: "white"}}>{filteredEvents.length}</Text>
   
       <FlatList
   data={filteredEvents}
@@ -427,23 +427,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: "black",
+    color: 'white'
   },
   modal: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: 'black',
+    color: 'white',
     marginHorizontal: 20,
     borderRadius: 10,
     padding: 20,
   },
   modalTitle: {
     fontSize: 20,
+    color: 'white',
     fontWeight: 'bold',
     marginBottom: 10,
   },
   modalDescription: {
     fontSize: 16,
+    color: 'white',
     marginBottom: 20,
   },
   modalCloseButton: {

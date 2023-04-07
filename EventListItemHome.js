@@ -29,7 +29,7 @@ const EventListItem = ({ event, onPress, onInvite }) => (
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    backgroundColor: '#f8f8f8',
+    backgroundColor: 'black',
     borderBottomWidth: 1,
     borderColor: '#eee',
     flexDirection: 'row',
@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 17,
+    color: 'white',
     maxWidth: 280,
     overflow: 'hidden',
   },

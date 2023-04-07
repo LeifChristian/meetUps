@@ -7,8 +7,6 @@ import moment from 'moment';
 import { useFocusEffect } from '@react-navigation/native';
 
 const CustomCalendar = () => {
-
-
   const [events, setEvents] = useState([])
 
 const config = {
@@ -48,7 +46,6 @@ useFocusEffect(
   //   acc[event.date] = { marked: true, dotColor: 'blue' };
   //   return acc;
   // }, {});
-
   
   const markedDates = events.reduce((acc, event) => {
     const date = moment(event.date).format('YYYY-MM-DD');
@@ -65,12 +62,12 @@ useFocusEffect(
   
 
   return (
-    <View>
-      <Text style={{ fontSize: 24, marginBottom: 20, textAlign: 'center' }}>Calendar</Text>
-      <Calendar
-        markedDates={markedDates}
-        onDayPress={handleDayPress}
-      />
+    <View style={{backgroundColor: 'black', flex: 1}}>
+    <Calendar
+  markedDates={markedDates}
+  onDayPress={handleDayPress}
+  style={{ backgroundColor: 'black'}}
+/> 
       <Modal
         animationType="slide"
         transparent={true}
@@ -79,8 +76,8 @@ useFocusEffect(
           setModalVisible(false);
         }}
       >
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-          <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'black' }}>
+          <View style={{ backgroundColor: 'black', padding: 20, borderRadius: 10 }}>
             {selectedEvents.map((event, index) => (
               <View key={index}>
                 <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{event.title}</Text>
