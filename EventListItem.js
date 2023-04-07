@@ -7,12 +7,12 @@ const EventListItem = ({ event, onPress }) => {
     <TouchableOpacity onPress={() => onPress(event)}>
       <Card style={styles.card}>
         <Card.Content>
-          <Text style={styles.title}>{event.title}</Text>
-          <Text style={styles.location}>{event.location}</Text>
-          <Text style={styles.date}>{event.date}</Text>
+          <Text selectable style={styles.title}>{event.title}</Text>
+          <Text selectable style={styles.location}>{event.location}</Text>
+          <Text selectable style={styles.date}>{event.date}</Text>
           <View style={styles.tagsContainer}>
             {event.tags.map((tag, index) => (
-              <Text key={index} style={styles.tag}>
+              <Text selectable key={index} style={styles.tag}>
                 {tag}
               </Text>
             ))}

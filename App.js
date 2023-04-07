@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
-import CalendarScreen from './CalendarScreen';
+import HomeScreen from './HomeScreen';
 import CreateEvent from './CreateEvent';
 import InviteScreen from './InviteScreen';
 import SettingsScreen from './SettingsScreen';
@@ -16,13 +16,13 @@ const App = () => {
   return (
     <NavigationContainer>
       <Tab.Navigator
-        initialRouteName="CalendarScreen"
+        initialRouteName="HomeScreen"
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
             switch (route.name) {
-              case 'CalendarScreen':
+              case 'HomeScreen':
                 iconName = focused ? 'search' : 'search-outline';
                 break;
               case 'CreateEvent':
@@ -48,8 +48,8 @@ const App = () => {
         }}
       >
         <Tab.Screen
-          name="CalendarScreen"
-          component={CalendarScreen}
+          name="HomeScreen"
+          component={HomeScreen}
           options={{ title: 'Explore' }}
         />
         <Tab.Screen

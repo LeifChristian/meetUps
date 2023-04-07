@@ -119,13 +119,13 @@ const CreateEvent = () => {
         placeholder="Enter location"
       />
 
-      <Button title="Create Event" onPress={()=>{handleSubmit(); navigation.navigate('CalendarScreen');
+      <Button title="Create Event" onPress={()=>{handleSubmit(); navigation.navigate('HomeScreen');
 }} />
 
 
 <View><Text>{"\n"}</Text></View>
 
-<Button title="Cancel" onPress={()=>{onPress={handleCancel}; navigation.navigate('CalendarScreen');
+<Button title="Cancel" onPress={()=>{onPress={handleCancel}; navigation.navigate('HomeScreen');
 }} />
     </View>
   );

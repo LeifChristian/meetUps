@@ -10,8 +10,27 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 
 
-const CalendarScreen = () => {
-  const categories = [    { key: 'sports', label: 'Sports', color: 'red' },    { key: 'music', label: 'Music', color: 'green' },    { key: 'technology', label: 'Technology', color: 'blue' },    { key: 'arts', label: 'Arts', color: 'orange' },  ];
+const HomeScreen = () => {
+  const categoriesPresort = [
+    { key: 'culture', label: 'Culture', color: 'crimson' },
+    { key: 'tech', label: 'Tech', color: '#8B008B' },
+    { key: 'music', label: 'Music', color: '#0074D9' },
+    { key: 'arts', label: 'Arts', color: 'teal' },
+  ];
+  
+  const categories = categoriesPresort.sort((a, b) => {
+    const labelA = a.label.toUpperCase();
+    const labelB = b.label.toUpperCase();
+    if (labelA < labelB) {
+      return -1;
+    }
+    if (labelA > labelB) {
+      return 1;
+    }
+    return 0;
+  });
+  
+  
   const [modalVisible, setModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -37,6 +56,15 @@ const [isDateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
       'Content-Type': 'application/json'
     }
   };
+
+
+  // const config = {
+  //   method: 'get',
+  //   url: 'http://localhost:3000/events',
+  //   headers: { 
+  //     'Content-Type': 'application/json'
+  //   }
+  // };
 
   const fetchEvents = async () => {
     try {
@@ -251,9 +279,9 @@ const [isDateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
 >
   <View style={styles.modal}>
     <Text style={styles.modalTitle}>{selectedEvent?.title}</Text>
-    <Text style={styles.modalDescription}>{selectedEvent?.description}</Text>
-    <Text style={styles.modalDescription}>{selectedEvent?.location}</Text>
-  <Text style={styles.modalDescription}>{selectedEvent ? new Date(selectedEvent.date).toLocaleString(): ''}</Text>
+    <Text selectable style={styles.modalDescription}>{selectedEvent?.description}</Text>
+    <Text selectable style={styles.modalDescription}>{selectedEvent?.location}</Text>
+  <Text selectable style={styles.modalDescription}>{selectedEvent ? new Date(selectedEvent.date).toLocaleString(): ''}</Text>
     <View style={styles.modalButtonContainer}>
       <TouchableOpacity
         style={[styles.modalButton, styles.closeButton]}
@@ -429,4 +457,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CalendarScreen;
+export default HomeScreen;

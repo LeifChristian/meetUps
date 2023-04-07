@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     display: 'flex',
     flexWrap: 'wrap',
+    justifyContent: 'center', // add this line
   },
   categoryItem: {
     flex: 1,
@@ -35,5 +36,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
+
 
 export default CategoryList;

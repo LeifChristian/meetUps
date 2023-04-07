@@ -8,3 +8,6 @@ all routes are at:
 http://54.219.200.236:3002/events
 https://expo.dev/accounts/leifonatree/projects/meetUps/builds/410239c9-c653-4e93-bf6d-4e20e76c841a  -latest build
 https://expo.dev/accounts/leifonatree/projects/meetUps/builds/5cf7fbd1-ae63-4dea-bf9f-770a4b0bd164
+
+🤖 Android app:
+https://expo.dev/artifacts/eas/sVyf4BV6BWv7M3sMn7Twaj.apk
