@@ -351,17 +351,20 @@ const [isDateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
     <TextInput
       style={styles.modalInput}
       placeholder="Description"
+      multiline={true}
       value={editedEvent?.description}
       onChangeText={(text) => setEditedEvent({...editedEvent, description: text})}
     />
     <TextInput
       style={styles.modalInput}
+      multiline={true}
       placeholder="Location"
       value={editedEvent?.location}
       onChangeText={(text) => setEditedEvent({...editedEvent, location: text})}
     />
     <TextInput
       style={styles.modalInput}
+      multiline={true}
       placeholder="Category"
       value={editedEvent?.category}
       onChangeText={(text) => setEditedEvent({...editedEvent, category: text})}
@@ -403,6 +406,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginRight: 10,
   },
+
+  modalInput: {backgroundColor: 'black', color: 'white', margin: 'auto', textAlign: 'center', marginBottom: 7},
+
   modalCloseButton: {
     backgroundColor: '#bbb',
     padding: 10,
