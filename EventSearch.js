@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
   input: {
     top: -11,
     textAlign:'center',
+    color: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
     width: 250,
