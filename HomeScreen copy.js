@@ -4,7 +4,6 @@ import CategoryList from './CategoryList';
 import EventSearch from './EventSearch';
 import CustomCalendar from './Calendar';
 import EventListItem from './EventListItemHome';
-import DateTime from 'react-datetime';
 import { useFocusEffect } from '@react-navigation/native';
 import axios from 'axios';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -46,7 +45,6 @@ const HomeScreen = () => {
 const [description, setDescription] = useState('');
 const [date, setDate] = useState('');
 const [time, setTime] = useState('');
-const [datey, setDatey] = useState('');
 const [location, setLocation] = useState('');
 const [category, setCategory] = useState('');
 const [isDateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
@@ -343,27 +341,13 @@ const [isDateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
     {editedEvent?.date ? moment(editedEvent.date).format('MMMM DD, YYYY - hh:mm A') : ''}
   </Text>
 </TouchableOpacity>
-{/* <DateTimePicker
+<DateTimePickerModal
   isVisible={isDateTimePickerVisible}
-  onDateChange={(e)=>{console.log(e); setDate(new Date(e))}}
-  onTimeChange={(e)=>{console.log(e); setTime(e)}}
-
   mode="datetime"
    onConfirm={(date) => handleDatePicked(date)}
   // onCancel={setDateTimePickerVisibility(false)}
   onCancel={()=>{console.log(null); setDateTimePickerVisibility(false)}}
-/> */}
-
-<DateTime
-        onChange={(momentObj) => {console.log(momentObj); setDatey(momentObj);
-          console.log(datey, date)
-          setDate(momentObj._d)}}
-        inputProps={{
-          placeholder: 'Select date and time'
-        }}
-      />
-
-
+/>
 
     <TextInput
       style={styles.modalInput}
@@ -399,9 +383,8 @@ const [isDateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
       <TouchableOpacity
         style={styles.modalButton}
         onPress={() => {
-           handleUpdateEvent(editedEvent);
-          console.log(editedEvent)
-           setEditedEvent(null);
+          handleUpdateEvent(editedEvent);
+          setEditedEvent(null);
           setEditModalVisible(false);
         }}
       >

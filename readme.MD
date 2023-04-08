@@ -15,3 +15,8 @@ https://expo.dev/accounts/leifonatree/projects/meetUps/builds/5cf7fbd1-ae63-4dea
 
 🤖 Android app:
 https://expo.dev/artifacts/eas/sVyf4BV6BWv7M3sMn7Twaj.apk
+
+
+
+expo build:web  
+npx serve web-build 
