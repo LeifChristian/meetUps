@@ -1,14 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const Event = require('./dataModel');
+const Setlist = require('./setlistModel')
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
 const app = express();
-const port = 3001;
-
-//mongosh "mongodb+srv://mycluster.erllz.mongodb.net/myFirstDatabase" --apiVersion 1 --username <username>
+const port = 3002;
 
 mongoose.connect('mongodb+srv://meetup:meetup@mycluster.erllz.mongodb.net/?retryWrites=true&w=majority', { useNewUrlParser: true })
   .then(() => console.log('Connected to MongoDB Atlas'))
@@ -17,14 +16,9 @@ mongoose.connect('mongodb+srv://meetup:meetup@mycluster.erllz.mongodb.net/?retry
 app.use(cors());
 app.use(bodyParser.json());
 
-// Mount your router to your app
-app.use('/events', router);
-
 // GET all events
-router.get('/', async (req, res) => {
-
+router.get('/events', async (req, res) => {
   try {
-    console.log('bob')
     const events = await Event.find();
     res.json(events);
   } catch (err) {
@@ -33,13 +27,12 @@ router.get('/', async (req, res) => {
 });
 
 // GET a single event by ID
-router.get('/:id', getEvent, (req, res) => {
+router.get('/events/:id', getEvent, (req, res) => {
   res.json(res.event);
 });
 
 // CREATE an event
-router.post('/', async (req, res) => {
- console.log('bob')
+router.post('/events', async (req, res) => {
   const event = new Event({
     title: req.body.title,
     date: req.body.date,
@@ -57,7 +50,7 @@ router.post('/', async (req, res) => {
 });
 
 // UPDATE an event
-router.patch('/:id', getEvent, async (req, res) => {
+router.patch('/events/:id', getEvent, async (req, res) => {
   if (req.body.title != null) {
     res.event.title = req.body.title;
   }
@@ -87,8 +80,7 @@ router.patch('/:id', getEvent, async (req, res) => {
 });
 
 // DELETE an event
-// DELETE an event
-router.delete('/:id', async (req, res) => {
+router.delete('/events/:id', async (req, res) => {
   try {
     const event = await Event.findByIdAndRemove(req.params.id);
 
@@ -101,7 +93,6 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
-
 
 async function getEvent(req, res, next) {
   let event;
@@ -120,8 +111,33 @@ async function getEvent(req, res, next) {
   next();
 }
 
-app.listen(port, () => {
-    console.log(`App listening at http://localhost:${port}`);
-  });
+router.get('/setlist', async (req, res) => {
+  try {
+    const setlist = await Setlist.findOne();
+    res.json(setlist);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
-module.exports = router;
+router.patch('/setlist', async (req, res) => {
+  try {
+    const setlist = await Setlist.findOne();
+    setlist.text = req.body.text;
+    const updatedSetlist = await setlist.save();
+    res.json(updatedSetlist);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+// Error handling middleware
+app.use(function (err, req, res, next) {
+  console.error(err.stack)
+  res.status(500).send('Something broke!')
+})
+
+// Start the server
+app.listen(port, () => {
+  console.log(`App listening at http://localhost:${port}`);
+});

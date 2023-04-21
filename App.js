@@ -8,6 +8,7 @@ import CreateEvent from './CreateEvent';
 import InviteScreen from './InviteScreen';
 import SettingsScreen from './SettingsScreen';
 import CustomCalendar from './Calendar';
+import Setlist from './Setlist'
 import { View, Text, useColorScheme } from 'react-native';
 
 const Tab = createBottomTabNavigator();
@@ -80,8 +81,11 @@ const TabNavigator = () => {
               case 'Settings':
                 iconName = focused ? 'settings' : 'settings-outline';
                 break;
+              case 'Setlist':
+                iconName = focused ? 'musical-notes' : 'musical-notes-outline';
+                return <Icon name={iconName} size={size} color={color} />;
+                break;
             }
-
             return <Icon name={iconName} size={size} color={color} />;
           },
       })}
@@ -130,6 +134,15 @@ const TabNavigator = () => {
         options={{
           title: 'Settings',
           tabBarStyle: { backgroundColor: 'black' },
+        }}
+      />
+
+<Tab.Screen
+        name="Setlist"
+        component={Setlist}
+        options={{
+          tabBarStyle: { backgroundColor: 'black' },
+          headerStyle: { backgroundColor: 'black' },
         }}
       />
     </Tab.Navigator>

@@ -10,9 +10,20 @@ const EventListItem = ({ event, onPress, onInvite }) => (
     <Text style={{ fontWeight: 'bold' }}>{event.title}</Text>
     <Text style={{ fontStyle: 'italic', fontSize: 12 }}> - {event.category}</Text>
     {"\n"}
+  
     <Text style={{ textDecorationLine: 'none', color: 'grey', fontSize: 14 }}>
+  {
+    (() => {
+      const date = new Date(event.date);
+      return `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}/${date.getFullYear().toString().slice(-2)} ${((date.getHours() % 12) || 12).toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')} ${(date.getHours() < 12) ? 'AM' : 'PM'}`;
+    })()
+  }
+</Text> {event.location ?  '- ' : ''}
+
+<Text style={{ textDecorationLine: 'none', color: 'grey', fontSize: 14 }}>
       {event.location}
     </Text>
+
   </Text>
   <View style={styles.buttonContainer}>
     <TouchableOpacity onPress={() => invite(event)} style={styles.button}>
