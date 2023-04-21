@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const setlistSchema = new mongoose.Schema({
   text: {
     type: String,
-    required: false
+    required: true
   },
   createdDate: {
     type: Date,
