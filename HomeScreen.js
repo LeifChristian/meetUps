@@ -47,7 +47,7 @@ const [time, setTime] = useState('');
 const [location, setLocation] = useState('');
 const [category, setCategory] = useState('');
 const [isDateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
-
+const [sortMode, setSortMode] = useState('description'); // 'date' or 'description'
 
   const config = {
     method: 'get',
@@ -79,6 +79,11 @@ const [isDateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
   useEffect(() => {
     fetchEvents();
   }, []);
+
+  useEffect(() => {
+    sortEvents(); // Sort events whenever they are updated or sort mode changes
+  }, [eventFromServer, sortMode]); // Add other dependencies as needed
+  
   
   useEffect(() => {
     if (eventFromServer) {
@@ -108,6 +113,7 @@ const [isDateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
       fetchEvents(); // Call the function to refresh the events list when the screen comes back into focus
     }, [])
   );
+
 
 
   const handleCategorySelect = (category) => {
@@ -244,11 +250,42 @@ const [isDateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
     }
   };
 
+  const sortEvents = () => {
+    let sortedEvents = [...filteredEvents]; // Create a copy of filteredEvents to sort
+  
+    if (sortMode === 'date') {
+      // Sort by date
+      sortedEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
+    } else {
+      // Sort by description (alphabetically), ensuring description exists and is a string
+      sortedEvents.sort((a, b) => {
+        const descA = a.description && typeof a.title === 'string' ? a.title : '';
+        const descB = b.description && typeof b.title === 'string' ? b.title : '';
+        return descA.localeCompare(descB);
+      });
+    }
+  
+    setFilteredEvents(sortedEvents); // Update state with sorted events
+  };
+  
+
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => {setSelectedCategory(null); setSearchText('')}}>
         <EventSearch onSearch={handleSearch} />
       </TouchableOpacity>
+      <TouchableOpacity onPress={() => {
+  const nextSortMode = sortMode === 'description' ? 'date' : 'description';
+  setSortMode(nextSortMode);
+}}>
+
+  <View style={{width: "100%", alignItems: 'center'}}>
+    <Text style={{color: 'white', textAlign: 'center', marginTop: '3%', borderWidth: 1, borderColor: 'white', padding: 10, borderRadius: 10}}>
+      Sort {sortMode === 'description' ? 'by date' : 'A-Z'}
+    </Text>
+  </View>
+</TouchableOpacity>
+
      
       <View style={{display: 'none'}}>
         <CustomCalendar events={filteredEvents} />
