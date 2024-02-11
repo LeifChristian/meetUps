@@ -3,6 +3,7 @@ using remote server 'main' on port 3002 to serve the backend
 ****to create a new apk****
 
 eas build --platform android --profile production  
+npx expo install --fix
 
 
 
